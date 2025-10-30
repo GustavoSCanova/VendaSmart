@@ -1,17 +1,21 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
+@section('content')
+<div class="min-h-screen bg-gray-100 py-10">
+    <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Painel do Administrador</h1>
+            <form action="{{ route('admin.logout') }}" method="POST">
+                @csrf
+                <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Sair</button>
+            </form>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+            <a href="#" class="p-6 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow text-center font-semibold">📦 Produtos</a>
+            <a href="#" class="p-6 bg-green-100 hover:bg-green-200 rounded-lg shadow text-center font-semibold">👥 Clientes</a>
+            <a href="#" class="p-6 bg-blue-100 hover:bg-blue-200 rounded-lg shadow text-center font-semibold">📊 Relatórios</a>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
