@@ -9,14 +9,14 @@ class Authenticate extends Middleware
     /**
      * Redireciona o usuário se ele não estiver autenticado.
      */
-   protected function redirectTo($request)
+protected function redirectTo($request)
 {
     if (! $request->expectsJson()) {
         if ($request->is('admin/*')) {
             return route('admin.login');
         }
 
-        return route('login');
+        return route('login'); // rota padrão do cliente
     }
 }
 }

@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
     if (Auth::guard($guard)->check()) {
         return $guard === 'admin'
             ? redirect()->route('admin.dashboard')
-            : redirect(RouteServiceProvider::HOME); //Não pode voltar para home se estiver logado como admin!
+            : redirect(RouteServiceProvider::HOME);
             }
         }
 

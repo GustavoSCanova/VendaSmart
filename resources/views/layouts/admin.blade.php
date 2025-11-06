@@ -18,15 +18,15 @@
                 <span class="text-2xl font-extrabold text-white">
                     <span class="text-yellow-100">Venda</span>Smart
                 </span>
-                <span class="text-white font-medium hidden sm:block">
+                {{-- <span class="text-white font-medium hidden sm:block">
                     Painel Administrativo
-                </span>
+                </span> --}}
             </div>
 
             <!-- Boas-vindas e Logout -->
             <div class="flex items-center space-x-4">
                 <span class="text-white text-lg">
-                    👋 Bem-vindo, <strong>{{ auth('admin')->user()->name }}</strong>
+                    Seja Bem-vindo, <strong>{{ auth('admin')->user()->name }}</strong>
                 </span>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf

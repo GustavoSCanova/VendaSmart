@@ -8,6 +8,28 @@ use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
 
+use App\Http\Controllers\Admin\AuthenticatedSessionController;
+
+// Rotas padrão (clientes)
+require __DIR__.'/auth.php';
+
+// Rotas de administrador
+Route::middleware('guest:admin')->group(function () {
+    Route::get('/admin-login', [AuthenticatedSessionController::class, 'create'])
+        ->name('admin.login');
+    Route::post('/admin-login', [AuthenticatedSessionController::class, 'store']);
+});
+
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    Route::post('/admin/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('admin.logout');
+});
+
+
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
