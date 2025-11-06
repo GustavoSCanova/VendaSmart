@@ -35,24 +35,29 @@
         </main>
     </div>
 
-    @php
-        $user = Auth::user();
-        $admin = Auth::guard('admin')->user();
-    @endphp
-
-    @if ($admin)
-        <div>Olá, {{ $admin->name }} (admin)</div>
-    @elseif($user)
-        <div>Olá, {{ $user->name }}</div>
-    @else
-        <div>Visitante</div>
-    @endif
-
     
-
+    
+    
 </body>
 
+@if ($admin)
+    <div>Olá, {{ $admin->name }} (admin)</div>
+@elseif($user)
+    <div>Olá, {{ $user->name }}</div>
+@else
+    <div>Visitante</div>
+@endif
 </html> --}}
+
+@php
+    $admin = Auth::guard('admin')->user();
+@endphp
+
+@if ($admin)
+    <span>Olá, {{ $admin->name }}</span>
+@endif
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

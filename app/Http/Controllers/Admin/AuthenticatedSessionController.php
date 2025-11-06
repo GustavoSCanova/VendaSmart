@@ -3,41 +3,32 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+
 
 class AuthenticatedSessionController extends Controller
 {
-    public function create()
-    {
-        return view('admin.auth.login');
-    }
-
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
-            throw ValidationException::withMessages([
-                'email' => __('As credenciais fornecidas estão incorretas.'),
-            ]);
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
+            // 🔹 Redireciona o cliente para a home pública
+            // return redirect()->intended(route('home'));
+            return redirect()->intended('/');
+
         }
 
-        $request->session()->regenerate();
-        return redirect()->intended(route('admin.dashboard'));
-    }
-
-    public function destroy(Request $request)
-    {
-        Auth::guard('admin')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('admin.login');
+        return back()->withErrors([
+            'email' => 'As credenciais informadas não foram encontradas.',
+        ]);
     }
 }

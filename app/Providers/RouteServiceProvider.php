@@ -2,51 +2,36 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * The path to the "home" route for your application.
-     *
-     * Typically, users are redirected here after authentication.
+     * O caminho para onde os usuários são redirecionados após o login.
      *
      * @var string
      */
-    public const HOME = '/dashboard';
+    public const HOME = '/'; // 👈 redireciona o cliente para a home pública
 
-    /**
-     * Define your route model bindings, pattern filters, and other route configuration.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $this->configureRateLimiting();
+    protected function mapAdminRoutes()
+{
+    Route::prefix('admin')
+        ->as('admin.')
+        ->middleware('web')
+        ->group(base_path('routes/admin.php'));
+}
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
+public function boot(): void
+{
+    parent::boot();
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
-    }
+    $this->routes(function () {
+        Route::middleware('web')
+            ->group(base_path('routes/web.php'));
 
-    /**
-     * Configure the rate limiters for the application.
-     *
-     * @return void
-     */
-    protected function configureRateLimiting()
-    {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
-    }
+        $this->mapAdminRoutes();
+    });
+}
+
 }

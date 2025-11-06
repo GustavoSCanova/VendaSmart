@@ -26,7 +26,7 @@
             <!-- Boas-vindas e Logout -->
             <div class="flex items-center space-x-4">
                 <span class="text-white text-lg">
-                    Seja Bem-vindo, <strong>{{ auth('admin')->user()->name }}</strong>
+                    Seja Bem-vindo, <strong>{{ Auth::guard('admin')->user()->name }}</strong>
                 </span>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf

@@ -9,10 +9,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Pega o administrador autenticado
         $admin = Auth::guard('admin')->user();
 
-        // Renderiza a view do painel admin
         return view('admin.dashboard', compact('admin'));
     }
 }

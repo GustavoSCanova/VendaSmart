@@ -3,45 +3,31 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
 
-use App\Http\Controllers\Admin\AuthenticatedSessionController;
-
-// Rotas padrão (clientes)
-require __DIR__.'/auth.php';
-
-// Rotas de administrador
-Route::middleware('guest:admin')->group(function () {
-    Route::get('/admin-login', [AuthenticatedSessionController::class, 'create'])
-        ->name('admin.login');
-    Route::post('/admin-login', [AuthenticatedSessionController::class, 'store']);
-});
-
-Route::middleware('auth:admin')->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-
-    Route::post('/admin/logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('admin.logout');
-});
-
-
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-
+/*
+|--------------------------------------------------------------------------
+| Web Routes (Usuários e Público)
+|--------------------------------------------------------------------------
+*/
 
 // Página inicial pública
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/search', [PublicController::class, 'search'])->name('search');
 
+// Carrinho
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
-// Rotas de autenticação
+// Rotas públicas de produtos
+Route::get('/products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'show'])->name('products.show');
+
+// Rotas de autenticação de clientes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -49,42 +35,17 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
-// Dashboard (apenas usuários logados)
-Route::middleware('auth')->group(function () {
+// Dashboard do cliente
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-});
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-// página inicial (ex.: lista de produtos pública)
-
-Route::get('/', [App\Http\Controllers\PublicController::class, 'home'])->name('home');
-
-// rotas públicas de produtos (ex.: listar e ver detalhes)
-Route::get('/products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
-Route::get('/products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'show'])->name('products.show');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
+    // Perfil do usuário
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Arquivo de autenticação padrão Laravel Breeze/Jetstream
 require __DIR__ . '/auth.php';
-require __DIR__.'/admin.php';
-
