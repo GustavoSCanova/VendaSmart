@@ -1,18 +1,6 @@
-<?php
+@extends('layouts.admin')
 
-namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-
-class DashboardController extends Controller
-{
-    public function index()
-    {
-        // Pega o administrador autenticado
-        $admin = Auth::guard('admin')->user();
-
-        // Renderiza a view do painel admin
-        return view('admin.dashboard', compact('admin'));
-    }
-}
+@section('content')
+    <h1 class="text-2xl font-bold text-gray-700 mb-4">Painel do Administrador</h1>
+    <p>Bem-vindo, {{ $admin->name ?? 'Administrador' }}!</p>
+@endsection
