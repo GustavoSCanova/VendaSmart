@@ -19,11 +19,11 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        $guards = empty($guards) ? [null] : $guards;
-
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+    foreach ($guards as $guard) {
+    if (Auth::guard($guard)->check()) {
+        return $guard === 'admin'
+            ? redirect()->route('admin.dashboard')
+            : redirect(RouteServiceProvider::HOME); //Não pode voltar para home se estiver logado como admin!
             }
         }
 
