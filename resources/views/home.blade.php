@@ -7,7 +7,6 @@
     <title>VendaSmart - Seu e-commerce moderno</title>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
-
 </head>
 
 <body class="bg-gray-50 text-gray-800">
@@ -17,59 +16,58 @@
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <h1 class="text-2xl font-bold text-gray-800">VendaSmart</h1>
 
-            {{-- <div class="flex-1 mx-6">
-                <input type="text" placeholder="Buscar produtos..."
-                    class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none">
-            </div> --}}
-
+            <!-- BARRA DE BUSCA -->
             <div class="flex-1 mx-6">
-                
                 <form action="{{ route('search') }}" method="GET" class="flex w-full">
                     <input type="text" name="q" placeholder="Buscar produtos..."
-                class="flex-1 px-4 py-2 rounded-l-md focus:outline-none" />
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition">
-                Buscar
-            </button>
-        </form>
-    </div>
-        
+                        class="flex-1 px-4 py-2 rounded-l-md focus:outline-none" />
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition">
+                        Buscar
+                    </button>
+                </form>
+            </div>
 
-            {{-- <div class="flex items-center space-x-4">
-                <a href="#" class="text-gray-800 hover:text-gray-700 font-medium">Entrar</a>
-                <a href="cart" class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13h10" />
-                    </svg>
-                    <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-1">0</span>
-                </a>
-            </div> --}}
-
+            <!-- MENU SUPERIOR (DINÂMICO) -->
             <div class="flex items-center space-x-4 text-white">
+                @php
+                    $user = Auth::user();
+                @endphp
 
-                <a href="http://127.0.0.1:8000/login"
-                    class="bg-white text-orange-600 px-3 py-1 rounded-md hover:bg-gray-100 transition">
-                    Entrar
-                </a>
-                <a href="http://127.0.0.1:8000/register"
-                    class="bg-white text-orange-600 px-3 py-1 rounded-md hover:bg-gray-100 transition">
-                    Criar conta
-                </a>
+                @if ($user)
+                    <span class="font-semibold">Olá, {{ $user->name }}</span>
 
-
-                <a href="http://127.0.0.1:8000/cart" class="relative">
+                     <a href="http://127.0.0.1:8000/cart" class="relative">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.25 2.25h1.5l1.5 12.75h12.75l1.5-9H6.75"></path>
                     </svg>
                     <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full">
-                        
+                        0
                     </span>
                 </a>
-            </div>
 
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="bg-white text-orange-600 px-3 py-1 rounded-md hover:bg-gray-100 transition">
+                            Sair
+                        </button>
+                    </form>
+                    
+                @else
+                    <a href="{{ route('login') }}"
+                        class="bg-white text-orange-600 px-3 py-1 rounded-md hover:bg-gray-100 transition">
+                        Entrar
+                    </a>
+
+                    <a href="{{ route('register') }}"
+                        class="bg-white text-orange-600 px-3 py-1 rounded-md hover:bg-gray-100 transition">
+                        Criar conta
+                    </a>
+                @endif
+            </div>
         </div>
     </nav>
 
