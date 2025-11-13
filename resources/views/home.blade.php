@@ -14,7 +14,10 @@
     <!-- NAVBAR -->
     <nav class="bg-yellow-400 shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-gray-800">VendaSmart</h1>
+            
+            <a href="{{ url('/') }}" class="text-2xl font-bold text-white">
+            VendaSmart
+        </a>
 
             <!-- BARRA DE BUSCA -->
             <div class="flex-1 mx-6">

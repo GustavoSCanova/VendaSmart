@@ -35,9 +35,6 @@
         </main>
     </div>
 
-    
-    
-    
 </body>
 
 @if ($admin)
@@ -48,15 +45,6 @@
     <div>Visitante</div>
 @endif
 </html> --}}
-
-@php
-    $admin = Auth::guard('admin')->user();
-@endphp
-
-@if ($admin)
-    <span>Olá, {{ $admin->name }}</span>
-@endif
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">

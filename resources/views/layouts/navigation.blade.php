@@ -35,7 +35,7 @@
             @endauth
 
             {{-- Se for administrador logado --}}
-            @auth('admin')
+            {{-- @auth('admin')
                 <div class="flex items-center space-x-2">
                     <span class="font-semibold">👑 {{ Auth::guard('admin')->user()->name }}</span>
 
@@ -52,7 +52,7 @@
                         </button>
                     </form>
                 </div>
-            @endauth
+            @endauth --}}
 
             {{-- Visitante (não logado) --}}
             @guest
@@ -83,7 +83,7 @@
                             d="M2.25 2.25h1.5l1.5 12.75h12.75l1.5-9H6.75"></path>
                     </svg>
                     <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full">
-                        
+                        0
                     </span>
                 </a>
             </div>
