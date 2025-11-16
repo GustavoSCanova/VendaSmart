@@ -21,7 +21,7 @@
                    class="flex items-center p-2 rounded-lg hover:bg-orange-400 transition {{ request()->routeIs('admin.dashboard') ? 'bg-orange-600' : '' }}">
                     📊 <span class="ml-2">Dashboard</span>
                 </a>
-                <a href="#" class="flex items-center p-2 rounded-lg hover:bg-orange-400 transition">
+                <a href="/admin/dashboard/products" class="flex items-center p-2 rounded-lg hover:bg-orange-400 transition">
                     📦 <span class="ml-2">Produtos</span>
                 </a>
                 <a href="#" class="flex items-center p-2 rounded-lg hover:bg-orange-400 transition">

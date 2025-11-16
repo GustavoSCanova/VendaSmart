@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;       
 
 // Rotas de login admin (sem estar logado)
 Route::middleware('guest:admin')->group(function () {
@@ -14,4 +15,12 @@ Route::middleware('guest:admin')->group(function () {
 Route::middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+//Rotas protegidas de produtos admin
+
+Route::middleware('auth:admin')->group(function () {
+
+Route::get('/dashboard/products', [ProductController::class, 'index']);
+
 });

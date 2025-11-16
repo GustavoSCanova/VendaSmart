@@ -24,8 +24,8 @@ Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.r
 Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 // Rotas públicas de produtos
-Route::get('/products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
-Route::get('/products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'show'])->name('products.show');
+// Route::get('/products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
+// Route::get('/products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'show'])->name('products.show');
 
 // Rotas de autenticação de clientes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');

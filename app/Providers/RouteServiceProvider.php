@@ -7,31 +7,35 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 
 class RouteServiceProvider extends ServiceProvider
 {
+    public const HOME = '/';
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        $this->routes(function () {
+
+            // Rotas padrão web.php
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
+
+            // Rotas Admin
+            $this->mapAdminRoutes();
+
+            // Rotas API
+            Route::middleware('api')
+                ->group(base_path('routes/api.php'));
+        });
+    }
+
     /**
-     * O caminho para onde os usuários são redirecionados após o login.
-     *
-     * @var string
+     * Define o grupo de rotas admin
      */
-    public const HOME = '/'; // 👈 redireciona o cliente para a home pública
-
     protected function mapAdminRoutes()
-{
-    Route::prefix('admin')
-        ->as('admin.')
-        ->middleware('web')
-        ->group(base_path('routes/admin.php'));
-}
-
-public function boot(): void
-{
-    parent::boot();
-
-    $this->routes(function () {
-        Route::middleware('web')
-            ->group(base_path('routes/web.php'));
-
-        $this->mapAdminRoutes();
-    });
-}
-
+    {
+        Route::prefix('admin')
+            ->as('admin.')
+            ->middleware('web')
+            ->group(base_path('routes/admin.php'));
+    }
 }
