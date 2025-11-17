@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ProductController;       
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AdminProductController;
 
 // Rotas de login admin (sem estar logado)
 Route::middleware('guest:admin')->group(function () {
@@ -21,6 +22,9 @@ Route::middleware('auth:admin')->group(function () {
 
 Route::middleware('auth:admin')->group(function () {
 
-Route::get('/dashboard/products', [ProductController::class, 'index']);
+    Route::get('/dashboard/products', [ProductController::class, 'index']);
+    Route::get('/dashboard/products', [AdminProductController::class, 'index'])->name('products.index');
+    Route::get('/dashboard/products/{id}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
 
 });
+
