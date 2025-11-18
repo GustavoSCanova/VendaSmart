@@ -70,4 +70,12 @@ public function destroy(Product $product)
 
     return redirect()->route('admin.products.index');
 }
+
+    /**
+     * Exibe a página pública de detalhe do produto.
+     */
+    public function show(Product $product)
+    {
+        return view('products.show', compact('product'));
+    }
 }

@@ -172,7 +172,7 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="py-2 px-3">{{ $product->id }}</td>
                             <td class="py-2 px-3">{{ $product->name }}</td>
-                            <td class="py-2 px-3">R$ {{ number_format($product->price, 2, ',', '.') }}</td>
+                            <td class="py-2 px-3">R${{ number_format($product->price, 2, ',', '.') }}</td>
                             <td class="py-2 px-3">{{ Str::limit($product->description, 100, '...') }}</td>
                             <!-- Limita a descrição -->
                             <td class="py-2 px-3">{{ $product->category }}</td>

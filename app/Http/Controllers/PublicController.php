@@ -9,8 +9,12 @@ class PublicController extends Controller
 {
     public function home()
     {
-        // Exibe página inicial
-        return view('home');
+        // Exibe página inicial com produtos em destaque
+        $products = Product::orderBy('created_at', 'desc')
+            ->take(8)
+            ->get();
+
+        return view('home', compact('products'));
     }
 
    public function search(Request $request)

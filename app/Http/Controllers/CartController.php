@@ -21,12 +21,18 @@ class CartController extends Controller
         $product = Product::findOrFail($id);
         $cart = session()->get('cart', []);
 
+        // Permitir passar quantidade via query string ou body (ex: ?quantity=2)
+        $quantity = (int) $request->input('quantity', 1);
+        if ($quantity < 1) {
+            $quantity = 1;
+        }
+
         if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+            $cart[$id]['quantity'] += $quantity;
         } else {
             $cart[$id] = [
                 'name' => $product->name,
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'price' => $product->price,
                 'image' => $product->image,
             ];

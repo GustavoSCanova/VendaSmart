@@ -103,16 +103,23 @@
         <div class="max-w-7xl mx-auto px-4">
             <h3 class="text-2xl font-bold mb-6">Produtos em destaque</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                @foreach (range(1, 8) as $i)
-                    <div class="border rounded-xl p-4 hover:shadow-lg transition">
-                        <img src="https://via.placeholder.com/300x200" alt="Produto" class="rounded-md mb-3">
-                        <h4 class="font-semibold text-lg">Produto {{ $i }}</h4>
-                        <p class="text-yellow-600 font-bold mt-1">R$ {{ 49.9 + $i }}</p>
-                        <button
-                            class="mt-3 w-full bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 rounded-lg">Adicionar
-                            ao carrinho</button>
-                    </div>
-                @endforeach
+                @if(isset($products) && $products->count())
+                    @foreach($products as $product)
+                        <div class="border rounded-xl p-4 hover:shadow-lg transition">
+                            @if($product->image)
+                                <img src="{{ \Illuminate\Support\Facades\Storage::url($product->image) }}" alt="{{ $product->name }}" class="rounded-md mb-3 object-cover w-full h-40">
+                            @else
+                                <img src="https://via.placeholder.com/300x200" alt="Produto" class="rounded-md mb-3">
+                            @endif
+
+                            <h4 class="font-semibold text-lg">{{ $product->name }}</h4>
+                            <p class="text-yellow-600 font-bold mt-1">R$ {{ number_format($product->price, 2, ',', '.') }}</p>
+                            <a href="{{ route('products.show', $product->id) }}" class="mt-3 block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 rounded-lg">Ver produto</a>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="col-span-full text-center text-gray-600">Nenhum produto encontrado.</div>
+                @endif
             </div>
         </div>
     </section>
