@@ -90,7 +90,7 @@
                 <div class="bg-white shadow rounded-lg p-4 text-center hover:shadow-lg transition">
                     <div
                         class="w-12 h-12 bg-yellow-100 mx-auto mb-2 rounded-full flex items-center justify-center text-yellow-600 font-bold">
-                        {{ substr($categoria, 0, 1) }}
+                        {{ substr($categoria, 0) }}
                     </div>
                     <p class="font-medium text-gray-700">{{ $categoria }}</p>
                 </div>

@@ -59,6 +59,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="block font-medium mb-1">Especificação</label>
+                        <textarea name="specification" class="w-full border rounded-lg p-2" placeholder="Detalhes técnicos, dimensões, materiais, etc."></textarea>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="block font-medium mb-1">Preço</label>
                         <input type="text" name="price" class="w-full border rounded-lg p-2" required>
                     </div>
@@ -113,6 +118,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="block font-medium mb-1">Especificação</label>
+                        <textarea class="w-full border rounded-lg p-2" x-model="editProduct.specification" name="specification" placeholder="Detalhes técnicos, dimensões, materiais, etc."></textarea>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="block font-medium mb-1">Preço</label>
                         <input type="text" class="w-full border rounded-lg p-2" x-model="editProduct.price"
                             name="price" required>
@@ -157,6 +167,7 @@
                         <th class="py-2 px-3 text-left">Nome</th>
                         <th class="py-2 px-3 text-left">Preço</th>
                         <th class="py-2 px-3 text-left">Descrição</th>
+                        <th class="py-2 px-3 text-left">Especificação</th>
                         <th class="py-2 px-3 text-left">Categoria</th>
                         <th class="py-2 px-3 text-left">Imagem</th>
                         <th class="py-2 px-3 text-center">Ações</th>
@@ -174,6 +185,7 @@
                             <td class="py-2 px-3">{{ $product->name }}</td>
                             <td class="py-2 px-3">R${{ number_format($product->price, 2, ',', '.') }}</td>
                             <td class="py-2 px-3">{{ Str::limit($product->description, 100, '...') }}</td>
+                            <td class="py-2 px-3">{{ Str::limit($product->specification ?? '', 100, '...') }}</td>
                             <!-- Limita a descrição -->
                             <td class="py-2 px-3">{{ $product->category }}</td>
                             <td class="py-2 px-3">
@@ -188,12 +200,13 @@
                             <td class="py-2 px-3 flex items-center justify-center gap-2">
                                 <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
                                     @click="openEdit({
-                        id: {{ $product->id }},
-                        name: @js($product->name),
-                        description: @js($product->description),
-                        price: '{{ $product->price }}',
-                        category: @js($product->category)
-                    })">
+                            id: {{ $product->id }},
+                            name: @js($product->name),
+                            description: @js($product->description),
+                            specification: @js($product->specification),
+                            price: '{{ $product->price }}',
+                            category: @js($product->category)
+                        })">
                                     Editar
                                 </button>
                                 <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}"

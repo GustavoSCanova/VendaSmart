@@ -3,12 +3,18 @@
 @section('content')
 <div class="max-w-6xl mx-auto px-4 py-10">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-6 rounded-lg shadow items-start">
-        <div class="flex justify-center md:justify-start">
+        <div class="flex flex-col items-center md:items-start">
             @if($product->image)
                 <img src="{{ \Illuminate\Support\Facades\Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full max-w-md h-auto object-contain rounded">
             @else
                 <img src="https://via.placeholder.com/600x420" alt="{{ $product->name }}" class="w-full max-w-md h-auto object-contain rounded">
             @endif
+            <div class="mt-4 text-left w-full">
+                <span class="font-semibold text-base">Descrição:</span>
+                <div class="text-gray-800 mt-1 mb-2 leading-relaxed text-base">
+                    {!! nl2br(e($product->description)) !!}
+                </div>
+            </div>
         </div>
 
         <div class="flex flex-col justify-between space-y-6">
@@ -16,35 +22,38 @@
                 <h1 class="text-2xl font-bold mb-2">{{ $product->name }}</h1>
                 <p class="text-yellow-600 font-bold text-xl mb-4">R$ {{ number_format($product->price, 2, ',', '.') }}</p>
 
-                {{-- Mostrar resumo com opção de "Ver mais" para não ocupar tanto espaço --}}
+                {{-- Características exibidas sempre abaixo do preço --}}
                 @php
                     $limit = 400;
                     $desc = $product->description ?? '';
-
-                    // Tentar separar 'Características' e 'Especificações' por marcador
                     $chars = '';
-                    $specs = $desc;
-                    $marker1 = 'Especificações:';
-                    $marker2 = 'Especificacoes:';
 
-                    if (mb_stripos($desc, $marker1) !== false) {
-                        [$charsPart, $rest] = explode($marker1, $desc, 2);
-                        $chars = trim($charsPart);
-                        $specs = trim($rest); // não incluir o marcador
-                    } elseif (mb_stripos($desc, $marker2) !== false) {
-                        [$charsPart, $rest] = explode($marker2, $desc, 2);
-                        $chars = trim($charsPart);
-                        $specs = trim($rest);
-                    } else {
-                        // sem separador, usar um trecho inicial como 'características'
-                        $chars = \Illuminate\Support\Str::before($desc, "\n\n");
-                        if (!$chars) {
-                            $chars = \Illuminate\Support\Str::limit($desc, 200);
+                    // Prioriza o campo específico `specification` do produto quando disponível
+                    $specs = trim($product->specification ?? '');
+
+                    // Se não houver especificação separada, tenta extrair de `description`
+                    if ($specs === '') {
+                        $marker1 = 'Especificações:';
+                        $marker2 = 'Especificacoes:';
+                        if (mb_stripos($desc, $marker1) !== false) {
+                            [$charsPart, $rest] = explode($marker1, $desc, 2);
+                            $chars = trim($charsPart);
+                            $specs = trim($rest);
+                        } elseif (mb_stripos($desc, $marker2) !== false) {
+                            [$charsPart, $rest] = explode($marker2, $desc, 2);
+                            $chars = trim($charsPart);
+                            $specs = trim($rest);
+                        } else {
+                            $chars = \Illuminate\Support\Str::before($desc, "\n\n");
+                            if (!$chars) {
+                                $chars = \Illuminate\Support\Str::limit($desc, 200);
+                            }
+                            // não repetir todo o `description` nas especificações; deixa vazio quando não separado
+                            $specs = '';
                         }
-                        $specs = $desc;
                     }
 
-                    // Remover possíveis títulos repetidos dentro dos textos
+                    // Limpa possíveis títulos dentro dos textos
                     $chars = preg_replace('/^\s*(Características:|Caracteristicas:)\s*/iu', '', $chars);
                     $specs = preg_replace('/^\s*(Especificações:|Especificacoes:)\s*/iu', '', $specs);
                 @endphp
@@ -72,9 +81,9 @@
 
                 {{-- Botão de expandir, logo após as especificações --}}
                     @if(mb_strlen($specs) > $limit)
-                        <div class="mt-3">
-                            <button id="desc-toggle-top" type="button" class="inline-flex items-center gap-2 text-sm md:text-base bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md shadow">
-                                <span id="desc-toggle-text">Ver descrição completa</span>
+                        <div class="mt-3 flex justify-end">
+                            <button id="desc-toggle-top" type="button" class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg font-semibold inline-flex items-center gap-2">
+                                <span id="desc-toggle-text">Ler Especificações Completa</span>
                                 <svg id="desc-toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                                 </svg>
@@ -120,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function setExpanded(state){
         expanded = state;
         if(expanded){
-            // mostra a descrição completa
+            // mostra as especificações completas
             preview.classList.add('hidden');
             full.classList.remove('hidden');
             if(fade) fade.classList.add('hidden');
@@ -131,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function(){
             preview.classList.remove('hidden');
             full.classList.add('hidden');
             if(fade) fade.classList.remove('hidden');
-            if(toggleText) toggleText.textContent = 'Ver descrição completa';
+            if(toggleText) toggleText.textContent = 'Ler Especificações Completa';
             if(toggleIcon) toggleIcon.classList.remove('rotate-180');
         }
     }

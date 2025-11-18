@@ -25,6 +25,7 @@ public function store(Request $request)
     $data = $request->validate([
         'name' => 'required|string',
         'description' => 'nullable|string',
+        'specification' => 'nullable|string',
         'price' => 'required',
         'category' => 'required|string',
         'image' => 'nullable|image|max:2048',
@@ -44,6 +45,7 @@ public function update(Request $request, Product $product)
     $data = $request->validate([
         'name' => 'required|string',
         'description' => 'nullable|string',
+        'specification' => 'nullable|string',
         'price' => 'required',
         'category' => 'required|string',
         'image' => 'nullable|image|max:2048',
